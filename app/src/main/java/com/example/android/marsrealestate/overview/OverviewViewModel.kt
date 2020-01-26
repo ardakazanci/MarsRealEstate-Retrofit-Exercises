@@ -44,9 +44,9 @@ class OverviewViewModel : ViewModel() {
         get() = _response
 
 
-    private val _property = MutableLiveData<MarsProperty>()
-    val property: LiveData<MarsProperty>
-        get() = _property
+    private val _properties = MutableLiveData<List<MarsProperty>>()
+    val properties: LiveData<List<MarsProperty>>
+        get() = _properties
 
 
     private var viewModelJob = Job()
@@ -78,7 +78,7 @@ class OverviewViewModel : ViewModel() {
                         "Success: ${listResult.size} Mars properties retrieved"
 
                 if (listResult.size > 0) {
-                    _property.value = listResult[0]
+                    _properties.value = listResult
                 }
 
             } catch (e: Exception) {
