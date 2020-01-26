@@ -36,12 +36,15 @@ import retrofit2.Response
  */
 class OverviewViewModel : ViewModel() {
 
+    enum class MarsApiStatus { LOADING, ERROR, DONE }
+
+
     // The internal MutableLiveData String that stores the most recent response
-    private val _response = MutableLiveData<String>()
+    private val _status = MutableLiveData<MarsApiStatus>()
 
     // The external immutable LiveData for the response String
-    val response: LiveData<String>
-        get() = _response
+    val status: LiveData<MarsApiStatus>
+        get() = _status
 
 
     private val _properties = MutableLiveData<List<MarsProperty>>()
@@ -72,17 +75,19 @@ class OverviewViewModel : ViewModel() {
 
 
             try {
+                _status.value = MarsApiStatus.LOADING
                 val listResult = getPropertiesDeferred.await()
 
-                _response.value =
-                        "Success: ${listResult.size} Mars properties retrieved"
+                _status.value = MarsApiStatus.DONE
 
                 if (listResult.size > 0) {
                     _properties.value = listResult
                 }
 
             } catch (e: Exception) {
-                _response.value = "Failure: ${e.message}"
+                _status.value = MarsApiStatus.ERROR
+                _properties.value = ArrayList()
+
             }
         }
     }
