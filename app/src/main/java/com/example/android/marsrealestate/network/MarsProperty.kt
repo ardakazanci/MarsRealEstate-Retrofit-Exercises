@@ -23,5 +23,12 @@ data class MarsProperty(
         val id: String,
         @Json(name = "img_src") val imgSrcUrl: String,
         val type: String,
-        val price: Double
-)
+        val price: Double) {
+    /*
+        DataClass içerisinde Gövde de type a göre sorgulama yapabilmemizi kolaylaştıran
+        bir property ekledik.
+     */
+    val isRental
+        get() = type == "rent"
+
+}
